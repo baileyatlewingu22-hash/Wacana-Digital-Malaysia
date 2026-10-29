@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teknologi Digital & Negara Bangsa Malaysia</title>
+<style>
+:root {
+  --site-primary: #123d36;
+  --site-on-primary: #ffffff;
+  --site-secondary: #d9a441;
+  --site-on-secondary: #172b27;
+  --site-background: #f5f4ee;
+  --site-on-background: #1d2926;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  color-scheme: light dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--site-font-body); background: var(--site-background); color: var(--site-on-background); }
+#app { min-height: 100vh; width: 100%; background-color: var(--site-background); color: var(--site-on-background); border-radius: 0; }
+button { font: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--site-secondary); outline-offset: 3px; }
+.topbar { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding: calc(16px * var(--site-spacing-scale)) clamp(16px,4vw,52px); background: var(--site-primary); color: var(--site-on-primary); }
+.brand { display:flex; align-items:center; gap:12px; font-weight:750; letter-spacing:.01em; }
+.brand-mark { display:grid; place-items:center; width:38px; height:38px; border-radius:50%; background:var(--site-secondary); color:var(--site-on-secondary); font-weight:900; }
+.top-actions { display:flex; gap:8px; flex-wrap:wrap; }
+.top-actions button { background:transparent; border:1px solid rgba(255,255,255,.45); color:white; border-radius:calc(999px * var(--site-radius-scale)); padding:9px 13px; }
+.top-actions button:hover { background:rgba(255,255,255,.12); }
+.hero { position:relative; overflow:hidden; background:var(--site-primary); color:white; padding:clamp(32px,7vw,82px) clamp(20px,8vw,112px) 58px; }
+.hero:after { content:""; position:absolute; right:-75px; top:-105px; width:330px; height:330px; border:50px solid var(--site-secondary); border-radius:50%; opacity:calc(.18 * var(--site-decoration-opacity)); pointer-events:none; }
+.eyebrow { text-transform:uppercase; letter-spacing:.16em; font-size:.75rem; font-weight:800; color:var(--site-secondary); }
+.hero h1 { position:relative; z-index:1; max-width:950px; font-size:clamp(2rem,5.4vw,4.4rem); line-height:1.04; letter-spacing:-.045em; margin:16px 0; font-family:var(--site-font-heading); }
+.hero p { position:relative; z-index:1; max-width:720px; font-size:clamp(1rem,1.8vw,1.22rem); line-height:1.7; color:#e1eae6; }
+.hero-meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; }
+.pill { display:inline-flex; align-items:center; gap:8px; border-radius:999px; padding:8px 12px; font-size:.85rem; font-weight:650; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); }
+.layout { display:grid; grid-template-columns:255px minmax(0,1fr); gap:28px; max-width:1440px; margin:0 auto; padding:30px clamp(16px,4vw,52px) 56px; }
+.sidebar { align-self:start; position:sticky; top:16px; border:1px solid #dce1d8; border-radius:calc(18px * var(--site-radius-scale)); background:#fffefa; padding:16px; max-height:calc(100vh - 32px); overflow:auto; }
+.sidebar h2 { margin:4px 8px 12px; font-size:.76rem; text-transform:uppercase; letter-spacing:.12em; color:#69756f; }
+.nav-list { display:grid; gap:4px; }
+.nav-item { text-align:left; display:grid; grid-template-columns:28px 1fr; align-items:start; gap:8px; padding:10px 9px; border:0; border-radius:10px; background:transparent; color:#34423c; line-height:1.35; font-size:.86rem; }
+.nav-item .num { display:grid; place-items:center; width:25px; height:25px; border-radius:8px; background:#edf0e9; color:#53635a; font-size:.72rem; font-weight:800; }
+.nav-item:hover { background:#f0f3ed; }
+.nav-item.active { background:#e5eee8; color:#123d36; font-weight:750; }
+.nav-item.active .num { background:var(--site-primary); color:white; }
+.content { min-width:0; }
+.slide-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px; }
+.slide-count { color:#64736b; font-size:.88rem; font-weight:650; }
+.progress { height:5px; border-radius:99px; background:#e1e5dd; overflow:hidden; margin:12px 0 26px; }
+.progress-fill { height:100%; width:0; background:var(--site-secondary); transition:width .25s ease; }
+.slide { display:none; animation:rise .25s ease both; }
+.slide.active { display:block; }
+@keyframes rise { from {opacity:0; transform:translateY(6px)} to {opacity:1; transform:translateY(0)} }
+.kicker { color:#8b651a; font-weight:800; text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; }
+.slide h2 { margin:9px 0 16px; font-size:clamp(1.8rem,3.6vw,3rem); line-height:1.12; letter-spacing:-.035em; color:#173e35; font-family:var(--site-font-heading); }
+.lead { color:#4f5e56; font-size:1.1rem; line-height:1.7; max-width:850px; }
+.cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin:24px 0; }
+.card { border:1px solid #dfe4dc; border-radius:calc(16px * var(--site-radius-scale)); background:#fffefa; padding:calc(20px * var(--site-spacing-scale)); }
+.card .icon { display:grid; place-items:center; width:42px; height:42px; border-radius:12px; background:#e8efe8; color:#17483c; font-size:1.25rem; margin-bottom:14px; }
+.card h3 { margin:0 0 8px; font-size:1.06rem; color:#203e34; }
+.card p, .card li { color:#536159; line-height:1.65; font-size:.95rem; }
+.card ul { padding-left:19px; margin:8px 0 0; }
+.callout { border-left:4px solid var(--site-secondary); border-radius:0 12px 12px 0; background:#fff7e6; color:#3e3b2e; padding:16px 18px; margin:22px 0; line-height:1.65; }
+.callout strong { color:#694c11; }
+.two-col { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:20px 0; }
+.panel { border-radius:16px; padding:20px; background:#e8f1eb; border:1px solid #d3e2d7; }
+.panel.negative { background:#fbefea; border-color:#efd8cf; }
+.panel h3 { margin:0 0 12px; font-size:1.05rem; }
+.panel ul { margin:0; padding-left:20px; line-height:1.75; color:#46564e; }
+.panel.negative ul { color:#6a4b42; }
+.data-table { width:100%; border-collapse:collapse; margin:20px 0; background:#fffefa; border-radius:12px; overflow:hidden; font-size:.92rem; }
+.data-table th { text-align:left; background:#e8eee7; color:#21483c; padding:13px; }
+.data-table td { vertical-align:top; border-top:1px solid #e1e5de; padding:13px; line-height:1.55; }
+.data-table td:first-child { font-weight:750; color:#34463d; width:29%; }
+.steps { display:grid; gap:12px; margin:22px 0; }
+.step { display:grid; grid-template-columns:44px 1fr; gap:14px; align-items:start; background:#fffefa; border:1px solid #dfe4dc; border-radius:14px; padding:15px; }
+.step-number { display:grid; place-items:center; width:40px; height:40px; border-radius:12px; background:var(--site-primary); color:white; font-weight:850; }
+.step h3 { margin:1px 0 5px; font-size:1rem; }
+.step p { margin:0; color:#5b675f; line-height:1.6; }
+.question { background:#173e35; color:#fff; border-radius:18px; padding:clamp(22px,4vw,34px); margin:22px 0; }
+.question h3 { margin:0 0 12px; color:#f2ca70; font-size:1.25rem; }
+.question p { line-height:1.7; color:#e4eee8; }
+.question ol { line-height:1.8; padding-left:22px; }
+.source-list { display:grid; gap:12px; margin:22px 0; }
+.source { background:#fffefa; border:1px solid #dfe4dc; border-radius:12px; padding:15px 17px; }
+.source strong { display:block; margin-bottom:5px; }
+.source a { color:#17634e; overflow-wrap:anywhere; }
+.slide-footer { display:flex; justify-content:space-between; align-items:center; gap:12px; border-top:1px solid #dce2d9; margin-top:34px; padding-top:18px; }
+.btn { border:1px solid #cbd5cc; border-radius:999px; padding:11px 16px; background:#fffefa; color:#213e34; font-weight:750; }
+.btn.primary { background:var(--site-primary); color:white; border-color:var(--site-primary); }
+.btn:disabled { opacity:.4; cursor:not-allowed; }
+.btn:hover:not(:disabled) { transform:translateY(-1px); }
+.hint { font-size:.83rem; color:#758078; }
+.footer { border-top:1px solid #dce2d9; padding:22px clamp(16px,4vw,52px); color:#68766d; font-size:.84rem; display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; }
+.presenter .sidebar { display:none; }
+.presenter .layout { display:block; max-width:1000px; padding-top:42px; }
+.presenter .slide h2 { font-size:clamp(2.1rem,5vw,4rem); }
+.presenter .card p, .presenter .card li, .presenter .panel li { font-size:1.05rem; }
+@media (prefers-color-scheme: dark) {
+  body, #app { background-color:light-dark(var(--site-background), #101a17); color:light-dark(var(--site-on-background), #edf2ed); }
+  .sidebar, .card, .source, .step, .data-table, .btn { background:light-dark(#fffefa, #192722); color:light-dark(#34423c, #e2eae4); border-color:light-dark(#dce1d8, #33443b); }
+  .sidebar h2, .slide-count, .hint, .footer { color:light-dark(#69756f, #aab9af); }
+  .nav-item { color:light-dark(#34423c, #dbe6de); }
+  .nav-item.active { background:light-dark(#e5eee8, #24483a); color:light-dark(#123d36, #e8f4eb); }
+  .slide h2, .card h3 { color:light-dark(#173e35, #e5f1e8); }
+  .lead, .card p, .card li, .step p { color:light-dark(#4f5e56, #bac9bf); }
+  .panel { background:light-dark(#e8f1eb, #1e382d); border-color:light-dark(#d3e2d7, #345643); }
+  .panel.negative { background:light-dark(#fbefea, #3a2824); border-color:light-dark(#efd8cf, #65443a); }
+  .panel ul, .panel.negative ul, .data-table td { color:light-dark(#46564e, #d2ded5); }
+  .data-table th { background:light-dark(#e8eee7, #263b30); color:light-dark(#21483c, #e2eee4); }
+  .data-table td:first-child { color:light-dark(#34463d, #e2eee4); }
+  .callout { background:light-dark(#fff7e6, #342d1c); color:light-dark(#3e3b2e, #eee2c3); }
+  .callout strong { color:light-dark(#694c11, #f3d27e); }
+  .progress { background:light-dark(#e1e5dd, #293a31); }
+  .slide-footer { border-color:light-dark(#dce2d9, #34453b); }
+  .source a { color:light-dark(#17634e, #8bd2ad); }
+}
+@media (max-width:900px) { .layout { grid-template-columns:1fr; } .sidebar { position:static; max-height:none; } .nav-list { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:580px) { .topbar { align-items:flex-start; flex-direction:column; } .cards,.two-col { grid-template-columns:1fr; } .nav-list { grid-template-columns:1fr; } .hero { padding-bottom:38px; } .slide-footer { align-items:stretch; } .slide-footer .btn { flex:1; } .data-table { font-size:.82rem; } .data-table th,.data-table td { padding:9px; } }
+@media print { .topbar,.sidebar,.slide-footer,.progress,.hero-meta,.footer,.slide-head { display:none!important; } .hero { padding:25px; background:#123d36!important; print-color-adjust:exact; } .layout { display:block; padding:20px; } .slide { display:block!important; page-break-after:always; } .slide h2 { font-size:26pt; } .card,.panel,.source { break-inside:avoid; } }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">MY</span><span>Wacana Digital Malaysia</span></div>
+    <div class="top-actions"><button id="presentBtn" type="button">⛶ Mod pembentangan</button><button id="printBtn" type="button">Cetak / PDF</button></div>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">Tugasan 3 · Persembahan berkumpulan · 20%</div>
+    <h1>Teknologi Digital &amp; Pembinaan Negara Bangsa Malaysia</h1>
+    <p>Menghuraikan pengaruh dan kesan teknologi digital terhadap perpaduan, identiti nasional dan aspirasi Malaysia — dengan penggunaan yang beretika, kritis dan bertanggungjawab.</p>
+    <div class="hero-meta"><span class="pill">◷ 30 minit</span><span class="pill">✦ Elemen 6C</span><span class="pill">◎ Belajar Cara Belajar</span></div>
+  </section>
+  <main class="layout" id="layout">
+    <aside class="sidebar"><h2>Kandungan pembentangan</h2><nav class="nav-list" id="navList" aria-label="Navigasi slaid"></nav></aside>
+    <section class="content" aria-live="polite">
+      <div class="slide-head"><span class="slide-count" id="slideCount">Slaid 1 daripada 15</span><span class="hint">Petua: guna kekunci ← dan →</span></div>
+      <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+      <article class="slide active" data-title="Tajuk pembentangan">
+        <div class="kicker">01 / Pengenalan</div><h2>Teknologi digital: jambatan atau tembok?</h2>
+        <p class="lead">Persoalan utama pembentangan ini ialah bagaimana teknologi digital boleh membantu membina negara bangsa yang bersatu padu, dan bagaimana penyalahgunaannya pula boleh menjejaskan keharmonian masyarakat.</p>
+        <div class="cards">
+          <div class="card"><div class="icon">◉</div><h3>Fokus tugasan</h3><p>Pengaruh dan kesan teknologi digital terhadap pembinaan negara bangsa Malaysia berteraskan aspirasi negara.</p></div>
+          <div class="card"><div class="icon">⌘</div><h3>Perspektif utama</h3><p>Perpaduan nasional, identiti kebangsaan, patriotisme, pendidikan, ekonomi dan tanggungjawab digital.</p></div>
+        </div>
+        <div class="callout"><strong>Idea utama:</strong> Teknologi bukan secara automatik menyatukan atau memecahbelahkan rakyat. Kesannya bergantung pada cara teknologi digunakan, kandungan yang disebarkan dan sikap pengguna.</div>
+        <p class="hint">Lengkapkan nama ahli kumpulan, kursus, pensyarah dan tarikh pada slaid tajuk sebelum pembentangan.</p>
+      </article>
+      <article class="slide" data-title="Pengenalan">
+        <div class="kicker">02 / Konteks</div><h2>Mengapa isu ini penting?</h2>
+        <p class="lead">Teknologi digital mengubah cara rakyat berkomunikasi, memperoleh maklumat dan mengambil bahagian dalam kehidupan bermasyarakat.</p>
+        <div class="cards">
+          <div class="card"><div class="icon">▣</div><h3>Penggunaan harian</h3><p>Media sosial, aplikasi pemesejan, portal berita, platform pembelajaran dan kecerdasan buatan (AI).</p></div>
+          <div class="card"><div class="icon">↔</div><h3>Kesan kepada masyarakat</h3><p>Maklumat bergerak pantas merentasi kaum, negeri dan generasi — termasuk maklumat yang tidak tepat.</p></div>
+          <div class="card"><div class="icon">＋</div><h3>Peluang</h3><p>Menggalakkan kerjasama, menyebarkan maklumat kenegaraan dan memperkenalkan budaya Malaysia.</p></div>
+          <div class="card"><div class="icon">!</div><h3>Cabaran</h3><p>Berita palsu, ucapan kebencian, polarisasi dan jurang akses digital.</p></div>
+        </div>
+        <div class="callout"><strong>Persoalan panduan:</strong> Bagaimanakah rakyat boleh memanfaatkan teknologi tanpa mengorbankan perpaduan dan rasa hormat?</div>
+      </article>
+      <article class="slide" data-title="Konsep negara bangsa">
+        <div class="kicker">03 / Konsep asas</div><h2>Apakah pembinaan negara bangsa?</h2>
+        <p class="lead">Pembinaan negara bangsa ialah usaha membentuk masyarakat yang mempunyai identiti kebangsaan, semangat kekitaan dan komitmen terhadap negara.</p>
+        <div class="cards">
+          <div class="card"><div class="icon">⚑</div><h3>Perpaduan nasional</h3><p>Membina hubungan harmoni antara masyarakat berbilang kaum, agama dan budaya.</p></div>
+          <div class="card"><div class="icon">◈</div><h3>Identiti nasional</h3><p>Memupuk rasa bangga menjadi rakyat Malaysia sambil menghargai kepelbagaian.</p></div>
+          <div class="card"><div class="icon">♡</div><h3>Patriotisme</h3><p>Meningkatkan kecintaan terhadap negara dan kesediaan menyumbang kepada masyarakat.</p></div>
+          <div class="card"><div class="icon">◎</div><h3>Integrasi nasional</h3><p>Mengeratkan hubungan antara wilayah dan kumpulan masyarakat melalui nilai bersama.</p></div>
+        </div>
+        <div class="callout"><strong>Kaitan dengan teknologi:</strong> Platform digital boleh menyebarkan nilai kebangsaan dan menghubungkan rakyat, tetapi juga boleh menyebarkan prasangka serta maklumat yang memecahbelahkan.</div>
+      </article>
+      <article class="slide" data-title="Bentuk pengaruh teknologi">
+        <div class="kicker">04 / Saluran pengaruh</div><h2>Di manakah pengaruh teknologi berlaku?</h2>
+        <table class="data-table"><thead><tr><th>Saluran digital</th><th>Pengaruh terhadap masyarakat</th></tr></thead><tbody>
+          <tr><td>Media sosial</td><td>Membentuk perbincangan awam, trend, pandangan dan persepsi terhadap isu semasa.</td></tr>
+          <tr><td>Aplikasi komunikasi</td><td>Memudahkan hubungan antara keluarga, komuniti dan masyarakat di lokasi berbeza.</td></tr>
+          <tr><td>Portal berita &amp; video</td><td>Mempengaruhi pengetahuan tentang sejarah, dasar dan peristiwa negara.</td></tr>
+          <tr><td>Pendidikan digital &amp; AI</td><td>Meluaskan akses kepada ilmu, terjemahan, idea dan kemahiran baharu.</td></tr>
+          <tr><td>Perkhidmatan digital</td><td>Memudahkan urusan awam, perniagaan dan penyertaan masyarakat.</td></tr>
+        </tbody></table>
+        <p class="lead">Saluran digital bukan sahaja menyampaikan maklumat; ia turut mempengaruhi sikap, tingkah laku dan cara rakyat memahami identiti Malaysia.</p>
+      </article>
+      <article class="slide" data-title="Kesan positif perpaduan">
+        <div class="kicker">05 / Kesan positif</div><h2>Teknologi sebagai pemangkin perpaduan</h2>
+        <div class="cards">
+          <div class="card"><div class="icon">↔</div><h3>Menghubungkan masyarakat</h3><p>Memudahkan komunikasi antara rakyat pelbagai kaum dan wilayah serta membuka ruang untuk berkongsi pengalaman.</p></div>
+          <div class="card"><div class="icon">⚑</div><h3>Menyemai patriotisme</h3><p>Video sejarah, lagu patriotik dan kempen Hari Kebangsaan boleh menarik minat generasi muda terhadap negara.</p></div>
+          <div class="card"><div class="icon">◉</div><h3>Mengenali budaya</h3><p>Kandungan tentang perayaan, makanan, seni dan tradisi membantu masyarakat memahami kepelbagaian budaya.</p></div>
+          <div class="card"><div class="icon">♡</div><h3>Menggerakkan bantuan</h3><p>Kempen kebajikan dan bantuan bencana boleh disebarkan dengan pantas dan menggalakkan kerjasama.</p></div>
+        </div>
+        <div class="callout"><strong>Contoh:</strong> Video sambutan Hari Kebangsaan yang menampilkan pelbagai komuniti boleh menimbulkan rasa bangga terhadap identiti Malaysia, jika kandungannya tepat dan inklusif.</div>
+      </article>
+      <article class="slide" data-title="Kesan negatif perpaduan">
+        <div class="kicker">06 / Kesan negatif</div><h2>Apabila teknologi menimbulkan perpecahan</h2>
+        <div class="two-col">
+          <div class="panel negative"><h3>Risiko utama</h3><ul><li>Berita palsu dan dakwaan tidak disahkan.</li><li>Ucapan kebencian berkaitan kaum atau agama.</li><li>Polarisasi apabila pengguna hanya melihat pandangan sehala.</li><li>Kandungan diubah atau dipotong di luar konteks.</li><li>Buli siber dan penghinaan dalam talian.</li></ul></div>
+          <div class="panel"><h3>Kesan terhadap negara bangsa</h3><ul><li>Prasangka antara kumpulan masyarakat.</li><li>Kepercayaan terhadap institusi dan komuniti terjejas.</li><li>Salah faham berkembang sebelum fakta disahkan.</li><li>Rasa kekitaan dan keharmonian boleh terhakis.</li></ul></div>
+        </div>
+        <div class="callout"><strong>Contoh situasi:</strong> Mesej tular yang menuduh sesuatu kumpulan mendapat layanan istimewa tanpa bukti boleh mencetuskan prasangka jika dikongsi berulang kali.</div>
+      </article>
+      <article class="slide" data-title="Identiti nasional dan budaya">
+        <div class="kicker">07 / Budaya & identiti</div><h2>Teknologi membentuk cara kita melihat Malaysia</h2>
+        <div class="two-col">
+          <div class="panel"><h3>Peluang</h3><ul><li>Mempromosikan seni dan warisan tempatan.</li><li>Mendokumentasikan sejarah, bahasa dan tradisi.</li><li>Menarik minat generasi muda terhadap budaya.</li><li>Meningkatkan pendedahan kepada kepelbagaian.</li></ul></div>
+          <div class="panel negative"><h3>Risiko</h3><ul><li>Stereotaip kaum disebarkan sebagai hiburan.</li><li>Maklumat sejarah tidak sahih mengelirukan pengguna.</li><li>Budaya dipersembahkan secara tidak tepat atau menghina.</li><li>Kandungan tular lebih diutamakan daripada ketepatan.</li></ul></div>
+        </div>
+        <div class="callout"><strong>Contoh:</strong> Video permainan tradisional seperti congkak dan wau boleh memperkenalkan warisan Malaysia. Penerangan yang tepat dan hormat membantu mengekalkan makna budaya tersebut.</div>
+        <p class="lead">Identiti nasional diperkukuh apabila teknologi digunakan untuk menghargai kepelbagaian dan membina rasa kekitaan sebagai rakyat Malaysia.</p>
+      </article>
+      <article class="slide" data-title="Pendidikan ekonomi dan penyertaan">
+        <div class="kicker">08 / Pembangunan</div><h2>Kesan kepada pendidikan, ekonomi dan penyertaan rakyat</h2>
+        <div class="cards">
+          <div class="card"><div class="icon">▤</div><h3>Pendidikan</h3><ul><li>Akses lebih luas kepada bahan pembelajaran.</li><li>Pembelajaran kendiri dan kolaborasi.</li><li>Peningkatan kemahiran digital.</li></ul></div>
+          <div class="card"><div class="icon">↗</div><h3>Ekonomi</h3><ul><li>Peluang pekerjaan digital.</li><li>Keusahawanan dan pemasaran dalam talian.</li><li>Inovasi dan daya saing negara.</li></ul></div>
+          <div class="card"><div class="icon">▦</div><h3>Penyertaan rakyat</h3><ul><li>Akses kepada maklumat awam.</li><li>Perkhidmatan kerajaan digital.</li><li>Penglibatan dalam kempen masyarakat.</li></ul></div>
+          <div class="card"><div class="icon">⚠</div><h3>Jurang digital</h3><ul><li>Akses internet dan peranti tidak sama.</li><li>Kemahiran digital berbeza mengikut individu.</li><li>Golongan tertentu berisiko ketinggalan.</li></ul></div>
+        </div>
+        <div class="callout"><strong>Perkara penting:</strong> Kemajuan digital hanya menyumbang kepada pembangunan inklusif jika akses, kemahiran dan peluang turut diperluas kepada golongan yang memerlukan.</div>
+      </article>
+      <article class="slide" data-title="Aspirasi Malaysia MADANI">
+        <div class="kicker">09 / Aspirasi Malaysia</div><h2>Menghubungkan teknologi dengan Malaysia MADANI</h2>
+        <p class="lead">Enam nilai teras Malaysia MADANI boleh dijadikan kerangka untuk menilai bagaimana teknologi sepatutnya digunakan bagi pembangunan dan kesejahteraan rakyat.</p>
+        <table class="data-table"><thead><tr><th>Nilai teras</th><th>Aplikasi teknologi digital</th></tr></thead><tbody>
+          <tr><td>Kemampanan</td><td>Menggunakan teknologi bagi pembangunan jangka panjang dan bertanggungjawab.</td></tr>
+          <tr><td>Kesejahteraan</td><td>Meluaskan akses kepada pendidikan, kesihatan dan perkhidmatan digital.</td></tr>
+          <tr><td>Daya cipta</td><td>Menghasilkan inovasi, aplikasi dan penyelesaian digital tempatan.</td></tr>
+          <tr><td>Hormat</td><td>Menghormati kepelbagaian kaum, agama, budaya dan pandangan.</td></tr>
+          <tr><td>Keyakinan</td><td>Membina kepercayaan melalui maklumat sahih, ketelusan dan tanggungjawab.</td></tr>
+          <tr><td>Ihsan</td><td>Menggunakan teknologi untuk membantu golongan yang memerlukan dan merapatkan jurang digital.</td></tr>
+        </tbody></table>
+        <div class="callout"><strong>Rumusan:</strong> Teknologi perlu menyokong kemajuan negara bersama nilai kemanusiaan, rasa hormat, kepercayaan dan perpaduan.</div>
+      </article>
+      <article class="slide" data-title="Langkah mengatasi cabaran">
+        <div class="kicker">10 / Tindakan</div><h2>Bagaimana kesan negatif boleh dikurangkan?</h2>
+        <div class="steps">
+          <div class="step"><div class="step-number">1</div><div><h3>Tingkatkan literasi digital</h3><p>Belajar mengenal pasti berita palsu, kandungan manipulatif dan sumber yang meragukan.</p></div></div>
+          <div class="step"><div class="step-number">2</div><div><h3>Amalkan etika digital</h3><p>Berkomunikasi dengan sopan serta mengelakkan penghinaan dan ucapan kebencian.</p></div></div>
+          <div class="step"><div class="step-number">3</div><div><h3>Semak sebelum berkongsi</h3><p>Bandingkan beberapa sumber yang boleh dipercayai dan semak konteks serta tarikh maklumat.</p></div></div>
+          <div class="step"><div class="step-number">4</div><div><h3>Perkukuh pendidikan kenegaraan</h3><p>Gunakan kandungan digital untuk memahami sejarah, Rukun Negara dan nilai perpaduan.</p></div></div>
+          <div class="step"><div class="step-number">5</div><div><h3>Kurangkan jurang digital</h3><p>Luaskan akses internet, kemudahan peranti dan latihan kemahiran kepada semua komuniti.</p></div></div>
+        </div>
+      </article>
+      <article class="slide" data-title="Aktiviti interaktif">
+        <div class="kicker">11 / Perbincangan audiens</div><h2>Teknologi menyatukan atau memecahbelahkan?</h2>
+        <div class="question"><h3>Situasi untuk dianalisis</h3><p>Satu hantaran media sosial mendakwa bahawa sesuatu kaum menerima layanan istimewa. Hantaran itu menjadi tular, tetapi tiada sumber rasmi atau bukti yang menyokong dakwaan tersebut.</p><ol><li>Apakah kesan hantaran ini terhadap hubungan antara kaum?</li><li>Apakah yang patut dilakukan sebelum mempercayai atau berkongsi hantaran itu?</li><li>Bagaimanakah teknologi boleh digunakan untuk membina persefahaman?</li></ol></div>
+        <div class="cards"><div class="card"><h3>Analisis yang diharapkan</h3><p>Hantaran berpotensi menimbulkan prasangka. Kesahihan maklumat perlu disemak sebelum dikongsi.</p></div><div class="card"><h3>Nilai yang ditunjukkan</h3><p>Pemikiran kritis, komunikasi, kewarganegaraan dan tanggungjawab digital.</p></div></div>
+        <p class="hint">Cadangan: beri audiens 60–90 saat untuk berbincang secara berpasangan, kemudian ambil dua atau tiga jawapan.</p>
+      </article>
+      <article class="slide" data-title="Elemen 6C">
+        <div class="kicker">12 / Kemahiran pembelajaran</div><h2>Bagaimana tugasan ini mengaplikasikan 6C?</h2>
+        <div class="cards">
+          <div class="card"><div class="icon">C</div><h3>Character · Sahsiah</h3><p>Menunjukkan etika digital, kejujuran dan tanggungjawab ketika berkongsi maklumat.</p></div>
+          <div class="card"><div class="icon">C</div><h3>Citizenship · Kewarganegaraan</h3><p>Menghubungkan teknologi dengan patriotisme, perpaduan dan tanggungjawab rakyat.</p></div>
+          <div class="card"><div class="icon">C</div><h3>Collaboration · Kolaborasi</h3><p>Membahagikan tugas penyelidikan, reka bentuk dan penyampaian antara ahli kumpulan.</p></div>
+          <div class="card"><div class="icon">C</div><h3>Communication · Komunikasi</h3><p>Menyampaikan hujah dengan jelas dan mengendalikan soal jawab bersama audiens.</p></div>
+          <div class="card"><div class="icon">C</div><h3>Critical Thinking · Pemikiran kritis</h3><p>Membandingkan kesan, menilai sumber dan mencadangkan penyelesaian berasaskan bukti.</p></div>
+          <div class="card"><div class="icon">C</div><h3>Creativity · Kreativiti</h3><p>Menghasilkan slaid visual, contoh situasi dan aktiviti interaktif yang menarik.</p></div>
+        </div>
+      </article>
+      <article class="slide" data-title="Belajar Cara Belajar">
+        <div class="kicker">13 / Proses pembelajaran</div><h2>Belajar Cara Belajar: daripada maklumat kepada kefahaman</h2>
+        <div class="steps">
+          <div class="step"><div class="step-number">1</div><div><h3>Mencari maklumat</h3><p>Mendapatkan sumber daripada dokumen rasmi, artikel ilmiah dan contoh semasa.</p></div></div>
+          <div class="step"><div class="step-number">2</div><div><h3>Menilai maklumat</h3><p>Meneliti kesahihan, ketepatan dan kesesuaian sumber.</p></div></div>
+          <div class="step"><div class="step-number">3</div><div><h3>Menyusun pengetahuan</h3><p>Mengelompokkan dapatan kepada pengaruh, kesan, cabaran dan penyelesaian.</p></div></div>
+          <div class="step"><div class="step-number">4</div><div><h3>Berkolaborasi</h3><p>Berkongsi dapatan, berbincang dan membina hujah bersama ahli kumpulan.</p></div></div>
+          <div class="step"><div class="step-number">5</div><div><h3>Membuat refleksi</h3><p>Menilai pembelajaran dan menentukan cara menggunakan teknologi secara bertanggungjawab.</p></div></div>
+        </div>
+        <div class="callout"><strong>Hasil pembelajaran:</strong> Pelajar bukan sahaja memahami isu teknologi, tetapi juga belajar mencari maklumat, berfikir secara kritis dan membina pengetahuan secara kendiri.</div>
+      </article>
+      <article class="slide" data-title="Kesimpulan">
+        <div class="kicker">14 / Penutup</div><h2>Teknologi harus menjadi jambatan perpaduan</h2>
+        <div class="cards">
+          <div class="card"><div class="icon">01</div><h3>Pengaruhnya besar</h3><p>Teknologi digital membentuk komunikasi, identiti nasional, pendidikan dan pembangunan ekonomi.</p></div>
+          <div class="card"><div class="icon">02</div><h3>Kesannya bergantung pada penggunaan</h3><p>Teknologi boleh mengeratkan hubungan atau mencetuskan salah faham dan perpecahan.</p></div>
+          <div class="card"><div class="icon">03</div><h3>Tanggungjawab bersama</h3><p>Literasi digital, etika dan sikap kritis diperlukan untuk melindungi keharmonian.</p></div>
+          <div class="card"><div class="icon">04</div><h3>Berteraskan aspirasi Malaysia</h3><p>Penggunaan teknologi perlu menyokong perpaduan, kesejahteraan, rasa hormat dan identiti kebangsaan.</p></div>
+        </div>
+        <div class="question"><h3>Ayat penutup</h3><p>“Kejayaan pembinaan negara bangsa Malaysia dalam era digital bukan hanya bergantung pada kecanggihan teknologi, tetapi juga pada kebijaksanaan rakyat menggunakannya. Teknologi perlu menjadi jambatan yang menyatukan masyarakat, bukannya tembok yang memisahkan kita.”</p></div>
+      </article>
+      <article class="slide" data-title="Rujukan">
+        <div class="kicker">15 / Rujukan</div><h2>Sumber untuk menyokong pembentangan</h2>
+        <p class="lead">Gunakan sumber yang benar-benar dibaca dan dirujuk. Untuk tugasan akademik, lengkapkan maklumat penulis, tahun, tajuk dan butiran penerbitan mengikut gaya rujukan yang ditetapkan pensyarah.</p>
+        <div class="source-list">
+          <div class="source"><strong>1. Kementerian Perpaduan Negara</strong><span>Dasar Perpaduan Negara — untuk perpaduan, integrasi nasional dan identiti kebangsaan.</span><br><a href="https://www.perpaduan.gov.my/" target="_blank" rel="noopener noreferrer">Portal rasmi Kementerian Perpaduan Negara ↗</a></div>
+          <div class="source"><strong>2. Malaysia MADANI</strong><span>Nilai teras: Kemampanan, Kesejahteraan, Daya Cipta, Hormat, Keyakinan dan Ihsan.</span><br><a href="https://malaysiamadani.gov.my/" target="_blank" rel="noopener noreferrer">Portal rasmi Malaysia MADANI ↗</a></div>
+          <div class="source"><strong>3. Kementerian Pendidikan Malaysia</strong><span>Dasar Pendidikan Digital — untuk pendidikan, kemahiran dan transformasi digital.</span><br><a href="https://www.moe.gov.my/" target="_blank" rel="noopener noreferrer">Portal rasmi KPM ↗</a></div>
+          <div class="source"><strong>4. MyDIGITAL</strong><span>Dasar dan inisiatif ekonomi digital Malaysia.</span><br><a href="https://www.mydigital.gov.my/" target="_blank" rel="noopener noreferrer">Portal rasmi MyDIGITAL ↗</a></div>
+          <div class="source"><strong>5. Artikel jurnal akademik</strong><span>Cari kajian tentang media sosial, literasi digital, perpaduan dan identiti nasional melalui pangkalan data akademik. Semak butiran bibliografi sebelum dimasukkan.</span><br><a href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer">Google Scholar ↗</a></div>
+        </div>
+        <div class="callout"><strong>Peringatan akademik:</strong> Semak tajuk dokumen, tahun terbitan dan pautan sebenar sebelum menghantar slaid. Jangan letakkan statistik atau dakwaan khusus tanpa sumber yang boleh disahkan.</div>
+      </article>
+      <div class="slide-footer"><button class="btn" id="prevBtn" type="button">← Sebelum</button><span class="hint" id="footerHint">Slaid 1 · Tekan → untuk seterusnya</span><button class="btn primary" id="nextBtn" type="button">Seterusnya →</button></div>
+    </section>
+  </main>
+  <footer class="footer"><span>Wacana Digital Malaysia · Bahan asas pembentangan akademik</span><span>Gunakan sumber sahih dan sesuaikan dengan arahan pensyarah.</span></footer>
+</div>
+<script>
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const navList = document.getElementById('navList');
+  const slideCount = document.getElementById('slideCount');
+  const progressFill = document.getElementById('progressFill');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const footerHint = document.getElementById('footerHint');
+  const app = document.getElementById('app');
+  let current = 0;
+  slides.forEach((slide, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'nav-item' + (index === 0 ? ' active' : '');
+    button.innerHTML = '<span class="num">' + String(index + 1).padStart(2, '0') + '</span><span>' + slide.dataset.title + '</span>';
+    button.addEventListener('click', () => showSlide(index));
+    navList.appendChild(button);
+  });
+  const navButtons = Array.from(navList.querySelectorAll('button'));
+  function showSlide(index) {
+    current = Math.max(0, Math.min(index, slides.length - 1));
+    slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
+    navButtons.forEach((button, i) => {
+      button.classList.toggle('active', i === current);
+      if (i === current) button.setAttribute('aria-current', 'step');
+      else button.removeAttribute('aria-current');
+    });
+    slideCount.textContent = 'Slaid ' + (current + 1) + ' daripada ' + slides.length;
+    progressFill.style.width = ((current + 1) / slides.length * 100) + '%';
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === slides.length - 1;
+    nextBtn.textContent = current === slides.length - 1 ? 'Tamat' : 'Seterusnya →';
+    footerHint.textContent = 'Slaid ' + (current + 1) + ' · ' + slides[current].dataset.title;
+    navButtons[current].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+  prevBtn.addEventListener('click', () => showSlide(current - 1));
+  nextBtn.addEventListener('click', () => showSlide(current + 1));
+  document.getElementById('presentBtn').addEventListener('click', () => {
+    app.classList.toggle('presenter');
+    const active = app.classList.contains('presenter');
+    document.getElementById('presentBtn').textContent = active ? '☷ Papar navigasi' : '⛶ Mod pembentangan';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight' || event.key === 'PageDown') { event.preventDefault(); showSlide(current + 1); }
+    if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); showSlide(current - 1); }
+    if (event.key === 'Home') showSlide(0);
+    if (event.key === 'End') showSlide(slides.length - 1);
+    if (event.key === 'Escape' && app.classList.contains('presenter')) {
+      app.classList.remove('presenter');
+      document.getElementById('presentBtn').textContent = '⛶ Mod pembentangan';
+    }
+  });
+  showSlide(0);
+})();
+</script>
+</body>
+</html>
